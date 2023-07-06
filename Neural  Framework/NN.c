@@ -19,15 +19,13 @@ float td_or[] ={
     1,1,1,
 };
 
-
-
 int main(){
 
     srand(time(0));
+    // srand(69);
 
     float* td = td_xor;
-    float eps = 1e-1;
-    float rate =1e-1;
+    float rate =1;
     size_t stride =3;
     size_t n = 4;
 
@@ -46,15 +44,18 @@ int main(){
     };
 
     size_t arch[] = {2,2,1};
-    NN nn = nn_alloc(arch,ARRAY_len(arch));
-    NN g = nn_alloc(arch,ARRAY_len(arch));
+    NN nn = nn_alloc(arch,ARRAY_LEN(arch));
+    NN g = nn_alloc(arch,ARRAY_LEN(arch));
     nn_rand(nn,0,1);
 
     printf("cost = %f\n",nn_cost(nn,ti,to));
 
     for(size_t i=0;i<1000*1000;i++){
-    nn_finite_diff(nn,g,eps,ti,to);
-    nn_learn(nn,g,rate);
+        // float eps = 1e-1;
+        // nn_finite_diff(nn,g,eps,ti,to);
+        // NN_PRINT(g);
+        nn_backprop(nn,g,ti,to);
+        nn_learn(nn,g,rate);
     }
     printf("cost = %f\n",nn_cost(nn,ti,to));
     for(size_t i=0;i<2;i++){
